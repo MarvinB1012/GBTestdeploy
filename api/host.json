@@ -1,0 +1,29 @@
+{
+  "version": "2.0",
+  "logging": {
+    "applicationInsights": {
+      "samplingSettings": {
+        "isEnabled": true,
+        "excludedTypes": "Request"
+      }
+    }
+  },
+  "extensions": {
+    "http": {
+      "routePrefix": "api",
+      "cors": {
+        "allowedOrigins": [
+          "http://localhost:5173",
+          "https://proud-ground-0ddf4e803.5.azurestaticapps.net"
+        ],
+        "allowedMethods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        "allowedHeaders": ["*"],
+        "maxAge": 86400
+      }
+    }
+  },
+  "extensionBundle": {
+    "id": "Microsoft.Azure.Functions.ExtensionBundle",
+    "version": "[4.*, 5.0.0)"
+  }
+}
