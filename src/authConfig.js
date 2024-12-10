@@ -4,11 +4,11 @@ import { PublicClientApplication, LogLevel } from "@azure/msal-browser";
 // Environment-aware configuration
 const isProd = import.meta.env.PROD;
 const BASE_URL = isProd
-  ? "https://proud-ground-0ddf4e803.5.azurestaticapps.net"
+  ? "https://blue-coast-05c01eb03.4.azurestaticapps.net/"
   : window.location.origin;
 
   const API_URL = isProd
-  ? "https://proud-ground-0ddf4e803.5.azurestaticapps.net"
+  ? "https://blue-coast-05c01eb03.4.azurestaticapps.net/"
   : import.meta.env.VITE_API_URL || "http://localhost:7071/api";
 
 // Ensure redirect URI matches the current environment

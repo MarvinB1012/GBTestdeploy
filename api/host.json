@@ -14,7 +14,7 @@
       "cors": {
         "allowedOrigins": [
           "http://localhost:5173",
-          "https://proud-ground-0ddf4e803.5.azurestaticapps.net"
+          "https://blue-coast-05c01eb03.4.azurestaticapps.net"
         ],
         "allowedMethods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         "allowedHeaders": ["*"],

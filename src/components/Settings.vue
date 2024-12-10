@@ -12,7 +12,7 @@ export default {
   },
   async mounted() {
   try {
-    const response = await axios.get('https://proud-ground-0ddf4e803.5.azurestaticapps.net/api/getSettings');
+    const response = await axios.get('https://blue-coast-05c01eb03.4.azurestaticapps.net/api/getSettings');
     const { update_interval } = response.data;
 
     // Setze die empfangenen Daten in die State-Werte
@@ -28,7 +28,7 @@ export default {
 
       try {
         // Backend-PATCH-Request, um das Intervall zu speichern
-        await axios.patch('https://proud-ground-0ddf4e803.5.azurestaticapps.net/api/updateInterval', {
+        await axios.patch('https://blue-coast-05c01eb03.4.azurestaticapps.net/api/updateInterval', {
           update_interval: totalInterval
         });
 

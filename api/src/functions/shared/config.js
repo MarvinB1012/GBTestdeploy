@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const allowedOrigins = [
-  'https://proud-ground-0ddf4e803.5.azurestaticapps.net',
+  'https://blue-coast-05c01eb03.4.azurestaticapps.net',
   'http://localhost:5173',
   'http://localhost:7071'  
 ];
