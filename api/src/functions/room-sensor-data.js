@@ -1,12 +1,13 @@
 const { app } = require('@azure/functions');
 
+const sql = require('mssql');
+const { dbConfig } = require('./shared/config');
+
 app.http('room-sensor-data', {
     methods: ['GET'],
     authLevel: 'anonymous',
     route: 'room-sensor-data/{sensorId?}',
     handler: async (request, context) => {
-        const sql = require('mssql');
-        const { corsHeaders, dbConfig } = require('./shared/config');
         const headers = corsHeaders(request.headers.get('origin'));
 
         if (request.method === 'OPTIONS') {
