@@ -1,5 +1,7 @@
 const { app } = require('@azure/functions');
 
+const sql = require('mssql');
+
 app.http('test', {
     methods: ['GET'],
     authLevel: 'anonymous',
@@ -16,6 +18,7 @@ app.http('test', {
                     hasDbDatabase: !!process.env.DB_DATABASE
                 }
             }
+
         };
     }
 });

@@ -1,12 +1,11 @@
 const { app } = require('@azure/functions');
 
-app.http('room', {
+app.http('rooms', {
     methods: ['GET'],
     authLevel: 'anonymous',
     route: 'rooms/{roomId?}',
     handler: async (request, context) => {
         const sql = require('mssql');
-        const { corsHeaders, dbConfig } = require('./shared/config');
         const config = {
             user: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
@@ -28,15 +27,7 @@ app.http('room', {
 
         if (request.method === 'OPTIONS') {
             return { status: 204, headers };
-        }
-
-        context.log('DB Config:', { 
-            server: dbConfig.server,
-            database: dbConfig.database,
-            // Nicht das Passwort loggen!
-            hasUser: !!dbConfig.user,
-            hasPassword: !!dbConfig.password
-        });
+        };
 
         let pool;
         try {
