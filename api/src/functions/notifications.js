@@ -1,8 +1,5 @@
 const { app } = require('@azure/functions');
 
-const sql = require('mssql');
-const { dbConfig } = require('./shared/config');
-
 
 async function createNotification(pool, sensorId, roomId, description, type) {
     
@@ -53,8 +50,11 @@ async function createNotification(pool, sensorId, roomId, description, type) {
     }
 }
 
+const sql = require('mssql');
+const { corsHeaders, dbConfig } = require('./shared/config');
+
 app.http('notifications', {
-    methods: ['GET', 'OPTIONS'],
+    methods: ['GET'],
     authLevel: 'anonymous',
     route: 'notifications',
     handler: async (request, context) => {

@@ -8,7 +8,7 @@ app.http('getSettings', {
     authLevel: 'anonymous',
     handler: async (request, context) => {
         const sql = require('mssql');
-        const { corsHeaders, dbConfig } = require('./shared/config');
+        
         const headers = corsHeaders(request.headers.get('origin'));
 
         if (request.method === 'OPTIONS') {

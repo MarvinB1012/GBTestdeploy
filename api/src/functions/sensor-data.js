@@ -13,10 +13,10 @@ const config = {
     port: 1433,
 };
 
+const sql = require('mssql');
+
 // Funktion zum Aktualisieren von Daten
 async function updateSensorData(data) {
-    require('dotenv').config();
-    const sql = require('mssql');
     const { checkThresholdsAndNotify } = require('./notifications');
     try {
         const pool = await sql.connect(config);
