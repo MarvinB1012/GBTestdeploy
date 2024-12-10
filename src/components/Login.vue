@@ -32,7 +32,7 @@ const handleEnter = () => {
           @mouseleave="isHovered = false"
           @click="handleEnter"
         >
-          Eintreten
+          Anmelden
         </button>
       </header>
     </div>

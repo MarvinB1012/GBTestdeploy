@@ -67,8 +67,6 @@ export default {
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;display=swap');
-
 /* Anwenden des Fonts */
 .room-card {
   font-family: 'Noto Sans', sans-serif;
