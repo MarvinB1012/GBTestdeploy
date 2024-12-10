@@ -58,8 +58,6 @@ app.http('notifications', {
     authLevel: 'anonymous',
     route: 'notifications',
     handler: async (request, context) => {
-        const sql = require('mssql');
-        const { corsHeaders, dbConfig } = require('./shared/config');
         
         context.log('Notifications endpoint called');
 

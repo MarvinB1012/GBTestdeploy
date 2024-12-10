@@ -15,7 +15,15 @@ app.http('test', {
             
            // Query ausführen
            const result = await pool.request()
-               .query('SELECT update_interval FROM settings');
+               .query(`
+                SELECT
+                    sensor_id,
+                    temperature AS current_temp,
+                    humidity AS current_humidity,
+                    timestamp AS last_updated
+                FROM SENSOR
+            `
+            );
 
            return {
                status: 200,
