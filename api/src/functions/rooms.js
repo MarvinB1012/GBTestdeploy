@@ -1,28 +1,14 @@
 const { app } = require('@azure/functions');
 
+const sql = require('mssql');
+const { dbConfig } = require('./shared/config');
+
 app.http('rooms', {
     methods: ['GET'],
     authLevel: 'anonymous',
     route: 'rooms/{roomId?}',
     handler: async (request, context) => {
-        const sql = require('mssql');
-        const config = {
-            user: process.env.DB_USER,
-            password: process.env.DB_PASSWORD,
-            server: process.env.DB_SERVER,
-            database: process.env.DB_DATABASE,
-            options: {
-                encrypt: true,
-                trustServerCertificate: false,
-                connectTimeout: 30000,
-                requestTimeout: 30000
-            },
-            pool: {
-                max: 10,
-                min: 0,
-                idleTimeoutMillis: 30000
-            }
-        }
+        
         const headers = corsHeaders(request.headers.get('origin'));
 
         if (request.method === 'OPTIONS') {
@@ -32,7 +18,7 @@ app.http('rooms', {
         let pool;
         try {
             // Verbindungstest vor dem eigentlichen Query
-            pool = await sql.connect(config);
+            pool = await sql.connect(dbConfig);
             await pool.request().query('SELECT 1');
             
             const roomId = request.params.roomId;
@@ -93,24 +79,6 @@ app.http('updateTargets', {
     handler: async (request, context) => {
         context.log('Anfrage zum Aktualisieren der Sollwerte erhalten');
 
-        const config = {
-            user: process.env.DB_USER,
-            password: process.env.DB_PASSWORD,
-            server: process.env.DB_SERVER,
-            database: process.env.DB_DATABASE,
-            options: {
-                encrypt: true,
-                trustServerCertificate: false,
-                connectTimeout: 30000,
-                requestTimeout: 30000
-            },
-            pool: {
-                max: 10,
-                min: 0,
-                idleTimeoutMillis: 30000
-            }
-        }
-
         const roomId = request.params.roomId; // Raum-ID aus der Route
         const { target_temp, target_humidity } = await request.json(); // Sollwerte aus der Anfrage
         context.log(`Aktualisierung für Raum ${roomId}:`, { target_temp, target_humidity });
@@ -129,7 +97,7 @@ app.http('updateTargets', {
         let pool;
         try {
             // Verbindung zur Datenbank herstellen
-            pool = await sql.connect(config);
+            pool = await sql.connect(dbConfig);
 
             if (!pool.connected) {
                 return {
