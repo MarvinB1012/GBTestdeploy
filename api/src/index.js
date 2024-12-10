@@ -4,7 +4,7 @@ app.setup({
     enableHttpStream: true,
 });
 
-require('./functions/notifications.js');
+//require('./functions/notifications.js');
 require('./functions/room-data.js');
 require('./functions/room-sensor-data.js');
 require('./functions/sensor-data.js');

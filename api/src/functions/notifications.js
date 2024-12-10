@@ -1,4 +1,4 @@
-const { app } = require('@azure/functions');
+/*const { app } = require('@azure/functions');
 
 
 async function createNotification(pool, sensorId, roomId, description, type) {
@@ -111,4 +111,4 @@ app.http('notifications', {
             if (pool) await pool.close();
         }
     }
-});
+});*/
