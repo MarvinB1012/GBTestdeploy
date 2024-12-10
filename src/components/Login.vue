@@ -1,20 +1,14 @@
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import companyLogo from '../assets/systecs-logo.png';
 import companyVideo from '../assets/companyVideo.mp4';
-import { msalSingleton } from '../authConfig';
 
+const router = useRouter();
 const isHovered = ref(false);
 
-const handleLogin = async () => {
-  try {
-    const instance = await msalSingleton.getInstance();
-    await instance.loginRedirect({
-      scopes: ['User.Read'],
-    });
-  } catch (error) {
-    console.error('Login failed:', error);
-  }
+const handleEnter = () => {
+  router.push('/room');  
 };
 </script>
 
@@ -25,20 +19,20 @@ const handleLogin = async () => {
       Ihr Browser unterstützt keine Videos.
     </video>
     <div :class="{ 'dark-overlay': isHovered }"></div>
-    
+   
     <div class="overlay-content">
       <header class="app-header">
         <img :src="companyLogo" class="header-logo" alt="Company Logo" />
         <p class="slogan">Ihr gesundes Büro</p>
         <link rel="stylesheet" href="https://use.typekit.net/fea8sbd.css">
-        
+       
         <button
           class="login-button"
           @mouseover="isHovered = true"
           @mouseleave="isHovered = false"
-          @click="handleLogin"
+          @click="handleEnter"
         >
-          Anmelden
+          Eintreten
         </button>
       </header>
     </div>
@@ -49,7 +43,6 @@ const handleLogin = async () => {
 body {
   overflow: hidden;
 }
-
 .dark-overlay {
   position: fixed;
   top: 0;
@@ -61,7 +54,6 @@ body {
   pointer-events: none;
   transition: 0.7s;
 }
-
 .background-video {
   position: fixed;
   top: 0;
@@ -71,7 +63,6 @@ body {
   object-fit: cover;
   z-index: 0;
 }
-
 .overlay-content {
   position: absolute;
   top: 0;
@@ -83,7 +74,6 @@ body {
   justify-content: center;
   align-items: center;
 }
-
 .app-header {
   text-align: center;
   box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1), 0px 4px 6px rgba(0, 0, 0, 0.05);
@@ -98,13 +88,11 @@ body {
   align-items: center;
   justify-content: center;
 }
-
 .header-logo {
   padding: 0;
   width: 400px;
   height: auto;
 }
-
 .slogan {
   font-family: "bruno-ace", sans-serif;
   font-weight: 400;
@@ -113,7 +101,6 @@ body {
   color: #000000;
   margin-top: 10px;
 }
-
 .login-button {
   box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1), 0px 4px 6px rgba(0, 0, 0, 0.05);
   height: 70px;
@@ -127,7 +114,6 @@ body {
   cursor: pointer;
   transition: background-color 0.5s ease;
 }
-
 .login-button:hover {
   background-color: #002b56;
 }
