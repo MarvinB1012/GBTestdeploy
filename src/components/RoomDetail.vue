@@ -110,7 +110,7 @@ export default {
   methods: {
     async fetchRoomDetails() {
       try {
-        const response = await fetch(`http://localhost:7071/api/rooms/${this.roomId}`);
+        const response = await fetch(`http://localhost:7071/api/room-data/${this.roomId}`);
         if (!response.ok) throw new Error("Failed to fetch room details");
         const data = await response.json();
         this.targetTemperature = data.target_temp;
@@ -147,7 +147,7 @@ export default {
 
     async updateDatabase(type, value) {
       try {
-        await fetch(`http://localhost:7071/api/rooms/${this.roomId}/targets`, {
+        await fetch(`http://localhost:7071/api/room-data/${this.roomId}/targets`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
