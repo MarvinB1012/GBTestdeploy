@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const allowedOrigins = [
   'https://blue-coast-05c01eb03.4.azurestaticapps.net',
   'http://localhost:5173',
