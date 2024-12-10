@@ -23,8 +23,14 @@ const dbConfig = {
   options: {
       encrypt: true,
       trustServerCertificate: false,
+      connectTimeout: 30000,
+      requestTimeout: 30000
   },
-  port: 1433,
+  pool: {
+      max: 10,
+      min: 0,
+      idleTimeoutMillis: 30000
+  }
 };
 
 module.exports = { corsHeaders, dbConfig, allowedOrigins };
