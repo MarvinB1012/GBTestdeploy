@@ -3,10 +3,10 @@ const { app } = require('@azure/functions');
 const sql = require('mssql');
 const { dbConfig } = require('./shared/config');
 
-app.http('rooms', {
+app.http('room-data', {
     methods: ['GET'],
     authLevel: 'anonymous',
-    route: 'rooms/{roomId?}',
+    route: 'room-data/{roomId?}',
     handler: async (request, context) => {
         
         const headers = corsHeaders(request.headers.get('origin'));

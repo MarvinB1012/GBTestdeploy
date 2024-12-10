@@ -25,7 +25,7 @@ const transformRoomData = (roomData) => ({
 class RoomApi {
     async getAllRooms() {
         try {
-            const response = await apiClient.get('/rooms');
+            const response = await apiClient.get('/room-data');
             console.log('API Response:', response);
 
             // Validate response data
