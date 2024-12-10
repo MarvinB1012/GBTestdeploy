@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Verwende die Umgebungsvariable für die baseURL
 const apiClient = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:7071/api',
+    baseURL: 'https://blue-coast-05c01eb03.4.azurestaticapps.net/api' || 'http://localhost:7071/api',
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'

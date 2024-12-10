@@ -9,6 +9,7 @@ require('./functions/rooms');
 require('./functions/room-sensor-data');
 require('./functions/sensor-data.js');
 require('./functions/settings.js');
+require('./functions/test.js');
 
 
 module.exports = app;
