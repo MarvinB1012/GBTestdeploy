@@ -1,9 +1,11 @@
 const { app } = require('@azure/functions');
 
+const sql = require('mssql');
+const { dbConfig } = require('./shared/config');
+
 
 async function createNotification(pool, sensorId, roomId, description, type) {
-    const sql = require('mssql');
-    const { corsHeaders, dbConfig } = require('./shared/config');
+    
     try {
         const transaction = new sql.Transaction(pool);
         await transaction.begin();
