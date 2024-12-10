@@ -19,7 +19,6 @@ const router = createRouter({
       path: '/room',
       name: 'Room',
       component: RoomView,
-      meta: { requiresAuth: true }
     },
     {
       path: '/:pathMatch(.*)*',
