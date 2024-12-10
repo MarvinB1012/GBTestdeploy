@@ -7,6 +7,23 @@ app.http('room', {
     handler: async (request, context) => {
         const sql = require('mssql');
         const { corsHeaders, dbConfig } = require('./shared/config');
+        const config = {
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            server: process.env.DB_SERVER,
+            database: process.env.DB_DATABASE,
+            options: {
+                encrypt: true,
+                trustServerCertificate: false,
+                connectTimeout: 30000,
+                requestTimeout: 30000
+            },
+            pool: {
+                max: 10,
+                min: 0,
+                idleTimeoutMillis: 30000
+            }
+        }
         const headers = corsHeaders(request.headers.get('origin'));
 
         if (request.method === 'OPTIONS') {
@@ -24,7 +41,7 @@ app.http('room', {
         let pool;
         try {
             // Verbindungstest vor dem eigentlichen Query
-            pool = await sql.connect(dbConfig);
+            pool = await sql.connect(config);
             await pool.request().query('SELECT 1');
             
             const roomId = request.params.roomId;
@@ -84,6 +101,24 @@ app.http('updateTargets', {
     route: 'rooms/{roomId}/targets',
     handler: async (request, context) => {
         context.log('Anfrage zum Aktualisieren der Sollwerte erhalten');
+
+        const config = {
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            server: process.env.DB_SERVER,
+            database: process.env.DB_DATABASE,
+            options: {
+                encrypt: true,
+                trustServerCertificate: false,
+                connectTimeout: 30000,
+                requestTimeout: 30000
+            },
+            pool: {
+                max: 10,
+                min: 0,
+                idleTimeoutMillis: 30000
+            }
+        }
 
         const roomId = request.params.roomId; // Raum-ID aus der Route
         const { target_temp, target_humidity } = await request.json(); // Sollwerte aus der Anfrage
