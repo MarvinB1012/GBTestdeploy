@@ -1,59 +1,77 @@
-import { ref, onMounted } from 'vue';
-import { msalInstance } from '../authConfig';
+import { ref, onMounted, watch } from 'vue';
 import { InteractionStatus } from '@azure/msal-browser';
-
-// State to track initialization
-const isInitializing = ref(false);
-let initializationPromise = null;
-
-// Ensure single initialization
-const ensureInitialized = async () => {
-    if (!initializationPromise) {
-        isInitializing.value = true;
-        initializationPromise = msalInstance.initialize()
-            .finally(() => {
-                isInitializing.value = false;
-            });
-    }
-    return initializationPromise;
-};
+import { msalSingleton, loginRequest } from '../authConfig';
 
 export function useMsal() {
-    const inProgress = ref(InteractionStatus.None);
-    const isInitialized = ref(false);
+  const inProgress = ref(InteractionStatus.None);
+  const isInitialized = ref(false);
+  const error = ref(null);
+  const account = ref(null);
 
-    const handleRedirect = async () => {
-        try {
-            // Ensure initialization before handling redirect
-            await ensureInitialized();
-            await msalInstance.handleRedirectPromise();
-        } catch (error) {
-            console.error('Failed to handle redirect:', error);
+  const login = async () => {
+    try {
+      const instance = await msalSingleton.getInstance();
+      await instance.loginRedirect(loginRequest);
+    } catch (err) {
+      error.value = err;
+      console.error('Login failed:', err);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      const instance = await msalSingleton.getInstance();
+      await instance.logoutRedirect();
+    } catch (err) {
+      error.value = err;
+      console.error('Logout failed:', err);
+    }
+  };
+
+  const checkAccount = async () => {
+    try {
+      const instance = await msalSingleton.getInstance();
+      const accounts = instance.getAllAccounts();
+      if (accounts.length > 0) {
+        account.value = accounts[0];
+        return true;
+      }
+      return false;
+    } catch (err) {
+      error.value = err;
+      console.error('Check account failed:', err);
+      return false;
+    }
+  };
+
+  onMounted(async () => {
+    try {
+      const instance = await msalSingleton.getInstance();
+      isInitialized.value = true;
+      
+      await msalSingleton.handleRedirect();
+      await checkAccount();
+
+      instance.addEventCallback((message) => {
+        inProgress.value = message.interactionStatus;
+        if (message.eventType === "msal:loginFailure") {
+          error.value = message.error;
+          console.error("Login failed:", message.error);
         }
-    };
+      });
+    } catch (err) {
+      error.value = err;
+      console.error('MSAL initialization failed:', err);
+    }
+  });
 
-    onMounted(async () => {
-        try {
-            await ensureInitialized();
-            isInitialized.value = true;
-            await handleRedirect();
-
-            msalInstance.addEventCallback((message) => {
-                if (message.eventType === "msal:loginFailure") {
-                    console.error("Login failed:", message.error);
-                }
-                inProgress.value = message.interactionStatus;
-            });
-        } catch (error) {
-            console.error('Failed to initialize MSAL:', error);
-        }
-    });
-
-    return {
-        instance: msalInstance,
-        inProgress,
-        isInitialized,
-        initialize: ensureInitialized,
-        isInitializing
-    };
+  return {
+    inProgress,
+    isInitialized,
+    error,
+    account,
+    login,
+    logout,
+    checkAccount
+  };
 }

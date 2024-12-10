@@ -1,140 +1,119 @@
-<script>
-import companyLogo from '../assets/systecs-logo.png'
-import companyVideo from '../assets/companyVideo.mp4'
-import { msalInstance } from '../authConfig'
+<script setup>
+import { ref } from 'vue';
+import companyLogo from '../assets/systecs-logo.png';
+import companyVideo from '../assets/companyVideo.mp4';
+import { msalSingleton } from '../authConfig';
 
-export default {
-  name: "Login",
-  data() {
-    return {
-      isHovered: false,
-      companyLogo,
-      companyVideo
-    };
-  },
-  methods: {
-    async handleLogin() {
-      try {
-        await msalInstance.loginRedirect({
-          scopes: ['User.Read'],
-        });
-      } catch (error) {
-        console.error('Login failed:', error);
-      }
-    }
+const isHovered = ref(false);
+
+const handleLogin = async () => {
+  try {
+    const instance = await msalSingleton.getInstance();
+    await instance.loginRedirect({
+      scopes: ['User.Read'],
+    });
+  } catch (error) {
+    console.error('Login failed:', error);
   }
 };
 </script>
 
 <template>
-  <div id="app">
-    <!-- Video als Hintergrund -->
+  <div id="app" class="login-view">
     <video autoplay muted loop class="background-video">
       <source :src="companyVideo" type="video/mp4" />
       Ihr Browser unterstützt keine Videos.
     </video>
     <div :class="{ 'dark-overlay': isHovered }"></div>
     
-    <!-- Inhalt auf dem Video -->
     <div class="overlay-content">
-      <!-- Logo -->
       <header class="app-header">
-        <img :src="companyLogo" class="header-logo" />
-        <!-- Slogan -->
+        <img :src="companyLogo" class="header-logo" alt="Company Logo" />
         <p class="slogan">Ihr gesundes Büro</p>
         <link rel="stylesheet" href="https://use.typekit.net/fea8sbd.css">
         
-        <!-- Login-Button -->
-          <button
+        <button
           class="login-button"
           @mouseover="isHovered = true"
           @mouseleave="isHovered = false"
           @click="handleLogin"
-          >
+        >
           Anmelden
         </button>
-    </header>
+      </header>
     </div>
   </div>
 </template>
-  
-<style scoped>
 
+<style scoped>
 body {
-  overflow: hidden; /* Deaktiviert Scrollen */
+  overflow: hidden;
 }
 
 .dark-overlay {
-  position: fixed; /* Deckt den gesamten Viewport ab */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* Dunkler transparenter Hintergrund */
-  z-index: 0; /* Über dem Video, aber unter dem Inhalt */
-  pointer-events: none; /* Blockiert keine Interaktionen mit anderen Elementen */
-  transition: 0.7s; /* Sanftes Einblenden */
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 0;
+  pointer-events: none;
+  transition: 0.7s;
 }
 
-
-/* Video als Hintergrund */
 .background-video {
-  position: fixed; /* Fixiert das Video im Hintergrund */
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%; /* Füllt die gesamte Breite */
-  height: 100%; /* Füllt die gesamte Höhe */
-  object-fit: cover; /* Schneidet das Video passend zu den Bildschirmmaßen */
-  z-index: 0; /* Stellt sicher, dass das Video hinter allem anderen liegt */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
 }
 
-/* Overlay-Inhalt */
 .overlay-content {
-  position: absolute; /* Positioniert den Inhalt relativ zum Viewport */
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100%; /* Füllt die gesamte Breite */
-  height: 100%; /* Füllt die gesamte Höhe */
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Zentriert den Inhalt vertikal */
+  justify-content: center;
   align-items: center;
 }
 
-/* Header */
 .app-header {
-  /*margin-bottom: 10px; /* Abstand zwischen Logo und Slogan */
   text-align: center;
   box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1), 0px 4px 6px rgba(0, 0, 0, 0.05);
   background-color: rgba(255, 255, 255, 0.55);
   border-radius: 45px;
-  height: auto; /* Lässt die Höhe flexibel bleiben */
-  min-height: 350px; /* Mindesthöhe, die immer beibehalten wird */
-  max-height: 350px; /* Maximale Höhe, die immer beibehalten wird */
+  height: auto;
+  min-height: 350px;
+  max-height: 350px;
   padding: 3%;
   display: flex;
-  flex-direction: column; /* Richtet die Inhalte untereinander aus */
-  align-items: center; /* Zentriert die Inhalte horizontal */
-  justify-content: center; /* Zentriert die Inhalte vertikal */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .header-logo {
   padding: 0;
-  width: 400px; /* Größe des Logos */
+  width: 400px;
   height: auto;
 }
 
-/* Slogan */
 .slogan {
   font-family: "bruno-ace", sans-serif;
   font-weight: 400;
   font-style: normal;
-  font-size: 30px; /* Schriftgröße des Slogans */
-  color: #000000; /* Weiße Schrift */
+  font-size: 30px;
+  color: #000000;
   margin-top: 10px;
 }
 
-/* Login-Button */
 .login-button {
   box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1), 0px 4px 6px rgba(0, 0, 0, 0.05);
   height: 70px;
@@ -142,7 +121,7 @@ body {
   border: none;
   padding: 15px 30px;
   font-size: 24px;
-  background-color: #0083bc; /* Systecs-Blau */
+  background-color: #0083bc;
   color: #ffffff;
   border-radius: 45px;
   cursor: pointer;
@@ -150,8 +129,6 @@ body {
 }
 
 .login-button:hover {
-  background-color: #002b56; /* Dunkleres Systecs */
+  background-color: #002b56;
 }
-
-
 </style>

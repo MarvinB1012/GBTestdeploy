@@ -1,36 +1,40 @@
-import { msalInstance, loginRequest } from '../authConfig';
+import { msalSingleton, loginRequest } from '../authConfig';
 
 export function registerGuard(router) {
   router.beforeEach(async (to, from, next) => {
-    const accounts = msalInstance.getAllAccounts();
-    const isAuthenticated = accounts.length > 0;
+    try {
+      const instance = await msalSingleton.getInstance();
+      const accounts = instance.getAllAccounts();
+      const isAuthenticated = accounts.length > 0;
 
-    if (to.meta.requiresAuth) {
-      if (isAuthenticated) {
-        try {
-          // Silently acquire token if needed
-          await msalInstance.acquireTokenSilent({
-            ...loginRequest,
-            account: accounts[0]
-          });
-          return next();
-        } catch (error) {
-          // If silent token acquisition fails, redirect to login
+      if (to.meta.requiresAuth) {
+        if (isAuthenticated) {
+          try {
+            await instance.acquireTokenSilent({
+              ...loginRequest,
+              account: accounts[0]
+            });
+            return next();
+          } catch (error) {
+            sessionStorage.setItem('loginRedirect', to.fullPath);
+            await instance.loginRedirect(loginRequest);
+            return;
+          }
+        } else {
           sessionStorage.setItem('loginRedirect', to.fullPath);
-          await msalInstance.loginRedirect(loginRequest);
+          await instance.loginRedirect(loginRequest);
           return;
         }
-      } else {
-        sessionStorage.setItem('loginRedirect', to.fullPath);
-        await msalInstance.loginRedirect(loginRequest);
-        return;
       }
-    }
 
-    if (to.path === '/login' && isAuthenticated) {
-      return next('/room');
+      if (to.path === '/login' && isAuthenticated) {
+        return next('/room');
+      }
+      
+      next();
+    } catch (error) {
+      console.error('Navigation guard error:', error);
+      next('/login');
     }
-
-    next();
   });
 }
