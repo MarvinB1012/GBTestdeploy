@@ -13,24 +13,21 @@ app.http('room', {
             return { status: 204, headers };
         }
 
-        context.log('Anfrage für rooms erhalten');
-        const roomId = request.params.roomId;
-        context.log(`Angeforderte roomId: ${roomId}`);
+        context.log('DB Config:', { 
+            server: dbConfig.server,
+            database: dbConfig.database,
+            // Nicht das Passwort loggen!
+            hasUser: !!dbConfig.user,
+            hasPassword: !!dbConfig.password
+        });
 
         let pool;
         try {
+            // Verbindungstest vor dem eigentlichen Query
             pool = await sql.connect(dbConfig);
-            if (!pool.connected) {
-                return {
-                    status: 503,
-                    headers,
-                    body: JSON.stringify({
-                        error: 'Database Connection Error',
-                        message: 'Could not establish database connection',
-                    }),
-                };
-            }
-
+            await pool.request().query('SELECT 1');
+            
+            const roomId = request.params.roomId;
             let query = `
                 SELECT
                     room_id,
@@ -53,39 +50,32 @@ app.http('room', {
 
             const result = await dbRequest.query(query);
             
-            if (result.recordset.length === 0) {
-                return {
-                    status: 404,
-                    headers,
-                    body: JSON.stringify({
-                        error: 'Not Found',
-                        message: roomId ? `Raum ${roomId} nicht gefunden` : 'Keine Räume gefunden',
-                    }),
-                };
-            }
-
-            const rooms = result.recordset;
             return {
                 status: 200,
                 headers,
-                body: JSON.stringify(roomId ? rooms[0] : rooms),
+                body: JSON.stringify(roomId ? result.recordset[0] : result.recordset)
             };
         } catch (error) {
-            context.error('Fehler aufgetreten:', error);
+            context.error('Database error:', error);
             return {
                 status: 500,
                 headers,
                 body: JSON.stringify({
-                    error: 'Interner Serverfehler',
-                    message: error.message,
-                }),
+                    message: 'Database connection failed',
+                    error: error.message,
+                    code: error.code
+                })
             };
         } finally {
             if (pool) {
-                await pool.close();
+                try {
+                    await pool.close();
+                } catch (error) {
+                    context.error('Error closing pool:', error);
+                }
             }
         }
-    },
+    }
 });
 
 app.http('updateTargets', {
