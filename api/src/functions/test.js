@@ -1,6 +1,5 @@
 const { app } = require('@azure/functions');
 const sql = require('mssql');
-const { corsHeaders, dbConfig } = require('./shared/config');
 
 app.http('test', {
    methods: ['GET'],
@@ -10,8 +9,25 @@ app.http('test', {
        let pool;
        try {
 
+        const config = {
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            server: process.env.DB_SERVER,
+            database: process.env.DB_DATABASE,
+            options: {
+                encrypt: true,
+                trustServerCertificate: false,
+                connectTimeout: 30000,
+                requestTimeout: 30000
+            },
+            pool: {
+                max: 10,
+                min: 0,
+                idleTimeoutMillis: 30000
+            }
+          };
            // Verbindung aufbauen
-           pool = await sql.connect(dbConfig);
+           pool = await sql.connect(config);
            
            // Query ausführen
            const result = await pool.request()
