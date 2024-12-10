@@ -25,7 +25,7 @@ const dbConfig = {
       requestTimeout: 30000
   },
   pool: {
-      max: 10,
+      max: 50,
       min: 0,
       idleTimeoutMillis: 30000
   }
