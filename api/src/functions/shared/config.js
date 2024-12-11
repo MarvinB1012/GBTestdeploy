@@ -2,12 +2,12 @@ const allowedOrigins = [
   'https://blue-coast-05c01eb03.4.azurestaticapps.net',
   'http://localhost:5173',
   'http://localhost:7071',
-  '95.223.57.108'  
+
 ];
 
 const corsHeaders = (origin) => ({
   'Content-Type': 'application/json',
-  'Access-Control-Allow-Origin': "*",
+  'Access-Control-Allow-Origin': allowedOrigins.includes(origin) ? origin : allowedOrigins[0],
   'Access-Control-Allow-Methods': 'GET, PATCH, POST',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization, Accept',
   'Access-Control-Max-Age': '86400',
