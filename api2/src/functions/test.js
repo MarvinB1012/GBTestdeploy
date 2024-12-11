@@ -1,4 +1,4 @@
-/*const { app } = require('@azure/functions');
+const { app } = require('@azure/functions');
 const sql = require('mssql');
 const { dbConfig } = require('./shared/config');
 
@@ -54,4 +54,4 @@ app.http('test', {
            }
        }
    }
-});*/
+});
