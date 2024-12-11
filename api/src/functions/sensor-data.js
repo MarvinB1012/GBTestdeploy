@@ -1,5 +1,8 @@
 const { app } = require('@azure/functions');
 
+require('dotenv').config();
+const sql = require('mssql');
+
 // Verbindungsdetails zur Azure SQL-Datenbank
 const config = {
     user: process.env.DB_USER,
@@ -17,7 +20,7 @@ const sql = require('mssql');
 
 // Funktion zum Aktualisieren von Daten
 async function updateSensorData(data) {
-    const { checkThresholdsAndNotify } = require('./notifications');
+
     try {
         const pool = await sql.connect(config);
 
@@ -52,9 +55,7 @@ async function updateSensorData(data) {
 
 // Funktion zum Abrufen der Einstellungen (Intervall)
 async function fetchIntervalFromSettings() {
-    require('dotenv').config();
-    const sql = require('mssql');
-    const { checkThresholdsAndNotify } = require('./notifications');
+   
     try {
         const pool = await sql.connect(config);
 
@@ -85,9 +86,7 @@ app.http('sensor-data', {
     authLevel: 'anonymous',
     route: 'sensor/sensor-data',
     handler: async (request, context) => {
-        require('dotenv').config();
-        const sql = require('mssql');
-        const { checkThresholdsAndNotify } = require('./notifications');
+       
         context.log(`HTTP function processed request for url "${request.url}"`);
     
         try {
