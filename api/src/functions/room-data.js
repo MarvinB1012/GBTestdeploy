@@ -75,8 +75,9 @@ app.http('room-data', {
 app.http('updateTargets', {
     methods: ['PATCH'],
     authLevel: 'anonymous',
-    route: 'rooms/{roomId}/targets',
+    route: 'room-data/{roomId}/targets',
     handler: async (request, context) => {
+        const headers = corsHeaders(request.headers.get('origin'));
         context.log('Anfrage zum Aktualisieren der Sollwerte erhalten');
 
         const roomId = request.params.roomId; // Raum-ID aus der Route

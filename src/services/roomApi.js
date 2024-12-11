@@ -95,6 +95,26 @@ class RoomApi {
             return [];
         }
     }
+    async getRoomById(roomId) {
+        try {
+            const response = await apiClient.get(`/room-data/${roomId}`);
+            return transformRoomData(response.data);
+        } catch (error) {
+            console.error(`Fehler beim Abrufen von Raum ${roomId}:`, error);
+            throw error;
+        }
+    }
+
+    // Raumeinstellungen aktualisieren (optional)
+    async updateRoomSettings(roomId, settings) {
+        try {
+            const response = await apiClient.patch(`/room-data/${roomId}/targets`, settings);
+            return transformRoomData(response.data);
+        } catch (error) {
+            console.error(`Fehler beim Aktualisieren von Raum ${roomId}:`, error);
+            throw error;
+        }
+    }
 }
 
 export const roomApi = new RoomApi();
