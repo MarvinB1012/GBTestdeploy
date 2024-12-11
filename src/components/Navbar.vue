@@ -172,7 +172,7 @@ export default {
    @close="handleNotificationCenterClose"
  />
 
-<Settings v-if="openSettings" @close="openSettings = false" />
+<Settings v-if="openSettings" @close="handleShowAllSettingsClose" />
 
 </template>
 

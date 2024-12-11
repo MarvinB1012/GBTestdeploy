@@ -21,6 +21,7 @@ export default {
   } catch (error) {
     console.error('Fehler beim Abrufen des Intervalls:', error.message || error);
   }
+  
   },
   methods: {
     async saveSettings() {
@@ -119,9 +120,6 @@ export default {
   font-family: 'BDOGrotesk', system-ui, sans-serif;
 }
 
-body {
-  overflow: hidden;
-}
 
 .settings-modal {
   position: fixed;
