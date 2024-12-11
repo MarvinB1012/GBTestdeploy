@@ -58,7 +58,7 @@ jobs:
       - name: Build And Deploy API 2
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ANOTHER_APP }}
+          azure_static_web_apps_api_token: 3dd8c4a54150c74609211d6b741069734ec5f270d218df5f03d0f65c274e608a04-521c7b3e-9d9b-438a-ad38-93513d923aa90100621050a8bb10
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           app_location: "/" # Pfad für die Frontend-App (falls gleich)
